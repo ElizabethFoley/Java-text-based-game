@@ -193,13 +193,27 @@ public class hallSim {
 		}
 	}
 	
-
 	public static void reversePath() {
 		System.out.println("This is the path in reverse order");
-		System.out.println(currentLoc);
-		for (int i = 0; i < path.size(); i++) {
+		//System.out.println(currentLoc);
+		for (int i = 0; i <= path.size()+1; i++) {
 			System.out.println(path.pop());
 		}
+		
+		System.out.println(roomList[0]);
+	}
+	public static void normalPath() {
+		System.out.println("This is the path in the order you went");
+		System.out.println(roomList[0]);
+		for (int i = 0; i <= path.size(); i++) {
+			pathFoward.push(path.pop());
+		}
+		for (int i = 0; i <=pathFoward.size() ; i++) {
+			System.out.println(pathFoward.pop());
+			
+		}
+		System.out.println(currentLoc);
+	}
 	}
 
 	// the following method will check to see if you are in a location with an item
