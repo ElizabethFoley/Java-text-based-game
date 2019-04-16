@@ -4,9 +4,12 @@
 //Elizabeth Foley
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Stack;
+import java.util.Comparator;
 
 public class hallSim {
 	// Below 8 locations have been created by creating new Room objects that take in
@@ -46,6 +49,7 @@ public class hallSim {
 	public static ArrayList<String> inventory = new ArrayList<String>();
 	public static ArrayList<String> itemList = new ArrayList<String>();
 	public static ArrayList<magicItems> magicShopInventory = new ArrayList<magicItems>();
+	public static ArrayList<String> sortingStuff = new ArrayList<String>();
 	// The following variable keeps track of the location
 	public static String currentLoc = roomList[0];
 	// The following scanner looks for user inputs
@@ -54,6 +58,7 @@ public class hallSim {
 	public static int score = 0;
 	public static int playerGold = 0;
 	public static Stack path = new Stack();
+	public static Stack pathFoward = new Stack();
 
 	public static void main(String[] args) {
 		File file = new File("C:/Users/NYgia/Documents/magicitems.txt");
@@ -63,6 +68,7 @@ public class hallSim {
 				String item = scan.nextLine();
 				int cost = (int) (Math.random() * 20) + 1;
 				magicItems item1 = new magicItems(item, cost);
+				sortingStuff.add(item);
 				magicShopInventory.add(item1);
 
 			}
@@ -76,11 +82,12 @@ public class hallSim {
 		itemList.add("Spell Book");
 		itemList.add("potion");
 		itemList.add("old robe");
+		sortInventory();
 		// The main method that call all the methods needed to run the game
 		System.out.println("Welcome to Building Explorer");
 		System.out.println("You start in the lab, south of the kitchen");
+		
 		gameLoop();
-
 	}
 
 	// gameLoop is how the game detects inputs, once the inputs are in it checks for
@@ -91,17 +98,23 @@ public class hallSim {
 	public static void gameLoop() {
 		while (true) {
 			String input = scan.nextLine();
+			trackPath();
+			
 			if (input.equals("n")) {
 				moveNorth();
+				//trackPath();
 			}
 			if (input.equals("e")) {
 				moveEast();
+				//trackPath();
 			}
 			if (input.equals("s")) {
 				moveSouth();
+				//trackPath();
 			}
 			if (input.equals("w")) {
 				moveWest();
+				//trackPath();
 			}
 			if (input.equals("h")) {
 				System.out.println("Valid commands are n, e, s, w, h, m, t, v, quit");
@@ -129,21 +142,33 @@ public class hallSim {
 			if (currentLoc == roomList[3]) {
 				magicShop();
 			}
-
-			if (input.equals("quit")) {
+			 if (input.equals("quit")) {
 				System.out.println("thanks for playing");
 				System.out.println("your final score was " + score);
-				System.out.println("Would you like to review you game forward or backward");
+				System.out.println("Would you like to review you game forward 'f' or backward");
 				String secondInput = scan.nextLine();
 				if(secondInput.equals("b")) {
 					reversePath();
 				}
 				if(secondInput.equals("f")) {
-					System.out.println("hi");
+					normalPath();
 				}
 				return;
 			}
 			System.out.println("your gold is " + playerGold);
+		}
+	}
+	
+	public static void sortInventory() {
+		List a = new ArrayList();
+		for (int i = 0; i < sortingStuff.size(); i++) {
+			a.add(sortingStuff.get(i));
+			//System.out.println(a.get(i));
+		}
+		
+		Collections.sort(a);
+		for (int i = 0; i < sortingStuff.size(); i++) {
+			System.out.println(a.get(i));
 		}
 	}
 
@@ -193,6 +218,33 @@ public class hallSim {
 		}
 	}
 	
+	public static void trackPath() {
+		if(currentLoc==roomList[0]) {
+			path.push(roomList[0]);
+		}
+		 if(currentLoc==roomList[1]) {
+			path.push(roomList[1]);
+		}
+		if(currentLoc==roomList[2]) {
+			path.push(roomList[2]);
+		}
+		if(currentLoc==roomList[3]) {
+			path.push(roomList[3]);
+		}
+		if(currentLoc==roomList[4]) {
+			path.push(roomList[4]);
+		}
+		if(currentLoc==roomList[5]) {
+			path.push(roomList[5]);
+		}
+		if(currentLoc==roomList[6]) {
+			path.push(roomList[6]);
+		}
+		if(currentLoc==roomList[7]) {
+			path.push(roomList[7]);
+		}
+	}
+
 	public static void reversePath() {
 		System.out.println("This is the path in reverse order");
 		//System.out.println(currentLoc);
@@ -202,6 +254,7 @@ public class hallSim {
 		
 		System.out.println(roomList[0]);
 	}
+	
 	public static void normalPath() {
 		System.out.println("This is the path in the order you went");
 		System.out.println(roomList[0]);
@@ -214,7 +267,7 @@ public class hallSim {
 		}
 		System.out.println(currentLoc);
 	}
-	}
+	
 
 	// the following method will check to see if you are in a location with an item
 	// if this is true then you will pick up the item and add it to your inventory
@@ -312,7 +365,8 @@ public class hallSim {
 			System.out.println("You can move North to the Office, South to the Lab or East to the Bathroom");
 			score += 5;
 			System.out.println("your score: " + score);
-			path.add(roomList[0]);
+			//path.add(roomList[0]);
+			//path.push(roomList[1]);
 
 		} else if (currentLoc == roomList[1]) {
 			System.out.println(roomList[2]);
@@ -320,7 +374,8 @@ public class hallSim {
 			System.out.println("You can move North to the Magic Shop, South to the Office, or East to the Classroom");
 			score += 5;
 			System.out.println("your score: " + score);
-			path.add(roomList[1]);
+			//path.add(roomList[1]);
+			//path.add(roomList[2]);
 
 		} else if (currentLoc == roomList[2]) {
 			System.out.println(roomList[3]);
@@ -328,7 +383,8 @@ public class hallSim {
 			System.out.println("You can move South to the Office or East to the Man Cave");
 			score += 5;
 			System.out.println("your score: " + score);
-			path.add(roomList[2]);
+			//path.add(roomList[2]);
+			//path.add(roomList[3]);
 
 		} else if (currentLoc == roomList[7]) {
 			System.out.println(roomList[6]);
@@ -336,19 +392,24 @@ public class hallSim {
 			System.out.println("You can move North to the Classroom or South to th Dorm, or West to the Kitchen");
 			score += 5;
 			System.out.println("your score: " + score);
-			path.add(roomList[7]);
+			//path.add(roomList[7]);
+			//path.add(roomList[6]);
 		} else if (currentLoc == roomList[6]) {
 			System.out.println(roomList[5]);
 			currentLoc = roomList[5];
 			System.out.println("You can move North to the Man Cave, South the Bathroom, or west to Office");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[6]);
+			//path.add(roomList[5]);
 		} else if (currentLoc == roomList[5]) {
 			System.out.println(roomList[4]);
 			currentLoc = roomList[4];
 			System.out.println("You can move South to the Classroom or West to the Magic shop");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[5]);
+			//path.add(roomList[4]);
 		} else if (currentLoc == roomList[4]) {
 			System.out.println("you cannot go farther north, try going West or South");
 		} else if (currentLoc == roomList[3]) {
@@ -369,36 +430,42 @@ public class hallSim {
 			System.out.println("You can move North to the Magic Shop, South to the Office, or East to the Classroom");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[3]);
 		} else if (currentLoc == roomList[2]) {
 			System.out.println(roomList[1]);
 			currentLoc = roomList[1];
 			System.out.println("You can move North to the Office, South to the Lab or East to the Bathroom");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[2]);
 		} else if (currentLoc == roomList[1]) {
 			System.out.println(roomList[0]);
 			currentLoc = roomList[0];
 			System.out.println("You can go North to the Office or east to the Dorm");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[1]);
 		} else if (currentLoc == roomList[6]) {
 			System.out.println(roomList[7]);
 			currentLoc = roomList[7];
 			System.out.println("You can Move North to the Bathroom or West to the Lab");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[6]);
 		} else if (currentLoc == roomList[5]) {
 			System.out.println(roomList[6]);
 			currentLoc = roomList[6];
 			System.out.println("You can move North to the Classroom or South to the Dorm or West to the Kitchen");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[5]);
 		} else if (currentLoc == roomList[4]) {
 			System.out.println(roomList[5]);
 			currentLoc = roomList[5];
 			System.out.println("You can move North to the Man Cave or South to the Bathroom or West tot eh Office");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[4]);
 		} else if (currentLoc == roomList[7]) {
 			System.out.println("you cannot go farther south, try going North, or East");
 		} else if (currentLoc == roomList[0]) {
@@ -418,13 +485,16 @@ public class hallSim {
 			System.out.println("You can Move North to the Bathroom or West to the Lab");
 			score += 5;
 			System.out.println("your score: " + score);
-
+			//path.add(roomList[0]);
+			//path.push(roomList[7]);
 		} else if (currentLoc == roomList[1]) {
 			System.out.println(roomList[6]);
 			currentLoc = roomList[6];
 			System.out.println("You can move North to the Classroom or South to the Dorm or West to the Kitchen");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[1]);
+			//path.add(roomList[6]);
 
 		} else if (currentLoc == roomList[2]) {
 			System.out.println(roomList[5]);
@@ -432,9 +502,13 @@ public class hallSim {
 			System.out.println("You can move North to the Man Cave or South to the Bathroom or West to the Office");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[2]);
+			//path.add(roomList[5]);
 		} else if (currentLoc == roomList[3]) {
 			System.out.println(roomList[4]);
 			currentLoc = roomList[4];
+			//path.add(roomList[3]);
+			//path.add(roomList[4]);
 		} else if (currentLoc == roomList[7] || currentLoc == roomList[6] || currentLoc == roomList[5]
 				|| currentLoc == roomList[4]) {
 			System.out.println("you cannot go farther East, maybe try going West");
@@ -454,13 +528,14 @@ public class hallSim {
 			System.out.println("You can go North to the Office or east to the Dorm");
 			score += 5;
 			System.out.println("your score: " + score);
-
+			//path.add(roomList[7]);
 		} else if (currentLoc == roomList[6]) {
 			System.out.println(roomList[1]);
 			currentLoc = roomList[1];
 			System.out.println("You can move North to the Office, South to the Lab or East to the Bathroom");
 			score += 5;
 			System.out.println("your score: " + score);
+			//path.add(roomList[6]);
 
 		} else if (currentLoc == roomList[5]) {
 			System.out.println(roomList[2]);
@@ -468,11 +543,12 @@ public class hallSim {
 			System.out.println("You can move North to the Magic Shop, South to the Office, or East to the Classroom");
 			score += 5;
 			System.out.println("your score: " + score);
-
+			//path.add(roomList[5]);
 		} else if (currentLoc == roomList[4]) {
 			System.out.println(roomList[3]);
 			currentLoc = roomList[3];
 			System.out.println("You can move South to the Office or East to the Man Cave");
+			//path.add(roomList[4]);
 		} else if (currentLoc == roomList[0] || currentLoc == roomList[1] || currentLoc == roomList[2]
 				|| currentLoc == roomList[3]) {
 			System.out.println("you cannot go farther West, maybe try going East");
